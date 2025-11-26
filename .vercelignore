@@ -1,6 +1,0 @@
-client/node_modules
-server/node_modules
-.git
-.gitignore
-node_modules
-npm-debug.log
