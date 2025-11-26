@@ -135,7 +135,7 @@ export const ProductDetails: React.FC = () => {
 					>
 						{product.inStock ? (
 							<>
-								<ShoppingBag size={20} /> Add to Bag
+								<ShoppingBag size={20} /> Добавить в корзину
 							</>
 						) : (
 							"Out of Stock"
