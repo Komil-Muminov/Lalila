@@ -1,32 +1,16 @@
 {
-  "name": "lalila-shop",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@react-three/fiber": "^9.4.0",
-    "@react-three/drei": "^10.7.7",
-    "three": "^0.181.2",
-    "react-router-dom": "^6.22.3",
-    "@tanstack/react-query": "^5.28.4",
-    "lucide-react": "^0.358.0",
-    "framer-motion": "^11.0.14",
-    "mongoose": "^9.0.0",
-    "express": "^5.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3"
-  },
-  "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  }
+	"name": "lalila-platform",
+	"private": true,
+	"version": "0.0.1",
+	"description": "Full-stack e-commerce platform with 3D visualization",
+	"scripts": {
+		"client": "cd client && npm run dev",
+		"server": "cd server && npm run dev",
+		"dev": "concurrently \"npm run client\" \"npm run server\"",
+		"build": "npm --prefix client run build && npm --prefix server run build",
+		"install-all": "npm install && npm --prefix client install && npm --prefix server install"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	}
 }
