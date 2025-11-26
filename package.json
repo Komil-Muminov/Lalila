@@ -14,13 +14,14 @@
     "@react-three/fiber": "^9.4.0",
     "@react-three/drei": "^10.7.7",
     "three": "^0.181.2",
-    "react-router-dom": "^7.9.6",
-    "lucide-react": "^0.554.0",
-    "framer-motion": "^12.23.24",
-    "dotenv": "^17.2.3",
-    "cors": "^2.8.5",
+    "react-router-dom": "^6.22.3",
+    "@tanstack/react-query": "^5.28.4",
+    "lucide-react": "^0.358.0",
+    "framer-motion": "^11.0.14",
+    "mongoose": "^9.0.0",
     "express": "^5.1.0",
-    "mongoose": "^9.0.0"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
