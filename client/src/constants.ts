@@ -52,7 +52,7 @@ export const MOCK_PRODUCTS: Product[] = [
 		color: "#F472B6",
 		category: "Электроника",
 		shape: "torus",
-		sizes: ["Ring 6", "Ring 7", "Ring 8"],
+		sizes: ["Размер 6", "Размер 7", "Размер 8"],
 		inStock: true,
 	},
 	{
