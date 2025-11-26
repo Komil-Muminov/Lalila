@@ -11,27 +11,28 @@
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
 	},
 	"dependencies": {
+		"@react-three/drei": "^10.7.7",
+		"@react-three/fiber": "^9.4.0",
+		"@tanstack/react-query": "^5.28.4",
+		"axios": "^1.6.0",
+		"framer-motion": "^11.0.14",
+		"lucide-react": "^0.555.0",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
+		"react-icons": "^4.11.0",
 		"react-router-dom": "^6.22.3",
-		"@tanstack/react-query": "^5.28.4",
-		"@react-three/fiber": "^9.4.0",
-		"@react-three/drei": "^10.7.7",
-		"three": "^0.181.2",
-		"lucide-react": "^0.358.0",
-		"framer-motion": "^11.0.14",
-		"axios": "^1.6.0"
+		"three": "^0.181.2"
 	},
 	"devDependencies": {
+		"@types/node": "^22.14.0",
 		"@types/react": "^18.2.47",
 		"@types/react-dom": "^18.2.18",
 		"@types/three": "^0.160.0",
-		"@types/node": "^22.14.0",
 		"@vitejs/plugin-react": "^5.0.0",
-		"typescript": "^5.8.2",
-		"vite": "^6.2.0",
-		"tailwindcss": "^3.4.1",
 		"autoprefixer": "^10.4.17",
-		"postcss": "^8.4.32"
+		"postcss": "^8.4.32",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5.8.2",
+		"vite": "^6.2.0"
 	}
 }

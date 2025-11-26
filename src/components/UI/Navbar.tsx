@@ -4,14 +4,14 @@ import { useTheme } from "../../shared/context/ThemeContext";
 import { useCart } from "../../shared/context/CartContext";
 import { ThemeType } from "../../types";
 import {
-	ShoppingBag,
-	Box,
-	Sun,
-	Moon,
-	Droplets,
-	Coffee,
-	Settings,
-} from "lucide-react";
+	FiShoppingBag,
+	FiBox,
+	FiSun,
+	FiMoon,
+	FiDroplet,
+	FiCoffee,
+	FiSettings,
+} from "react-icons/fi";
 
 export const Navbar: React.FC = () => {
 	const { theme, setTheme } = useTheme();
@@ -40,7 +40,7 @@ export const Navbar: React.FC = () => {
 							: "bg-gradient-to-tr from-purple-500 to-pink-500 text-white"
 					}`}
 				>
-					<Box className="w-6 h-6" />
+					<FiBox className="w-6 h-6" />
 				</div>
 				<span className="text-2xl font-display font-bold tracking-tight">
 					Lalila
@@ -63,7 +63,7 @@ export const Navbar: React.FC = () => {
 							location.pathname === "/admin" ? "opacity-100 font-bold" : ""
 						}`}
 					>
-						<Settings size={14} /> Администратор
+						<FiSettings size={14} /> Администратор
 					</Link>
 				</div>
 
@@ -82,7 +82,7 @@ export const Navbar: React.FC = () => {
 								: "text-gray-400 hover:text-current"
 						}`}
 					>
-						<Sun size={18} />
+						<FiSun size={18} />
 					</button>
 					<button
 						onClick={() => setTheme(ThemeType.GLASS)}
@@ -92,7 +92,7 @@ export const Navbar: React.FC = () => {
 								: "text-gray-400 hover:text-current"
 						}`}
 					>
-						<Droplets size={18} />
+						<FiDroplet size={18} />
 					</button>
 					<button
 						onClick={() => setTheme(ThemeType.AMOLED)}
@@ -102,7 +102,7 @@ export const Navbar: React.FC = () => {
 								: "text-gray-400 hover:text-current"
 						}`}
 					>
-						<Moon size={18} />
+						<FiMoon size={18} />
 					</button>
 					<button
 						onClick={() => setTheme(ThemeType.SOFT)}
@@ -112,12 +112,12 @@ export const Navbar: React.FC = () => {
 								: "text-gray-400 hover:text-current"
 						}`}
 					>
-						<Coffee size={18} />
+						<FiCoffee size={18} />
 					</button>
 				</div>
 
 				<button className="relative p-2 rounded-full hover:bg-black/5 transition-colors">
-					<ShoppingBag className="w-6 h-6" />
+					<FiShoppingBag className="w-6 h-6" />
 					{cart.length > 0 && (
 						<span
 							className={`absolute top-0 right-0 w-5 h-5 text-xs font-bold rounded-full flex items-center justify-center animate-bounce ${
