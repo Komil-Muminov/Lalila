@@ -7,7 +7,7 @@ import { fetchProducts } from '../services/api';
 import { Product, ThemeType, ProductCategory } from '../types';
 import { useCart } from '../shared/context/CartContext';
 import { useTheme } from '../shared/context/ThemeContext';
-import { Plus, Search, ChevronLeft, ChevronRight, ArrowDown } from 'lucide-react';
+import { Plus, Search, ChevronLeft, ChevronRight, ArrowDown, X } from 'lucide-react';
 
 export const Home: React.FC = () => {
   const { addToCart } = useCart();
@@ -15,6 +15,7 @@ export const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'All'>('All');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,9 +35,13 @@ export const Home: React.FC = () => {
   }, []);
 
   // Filter Logic
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = p.name.toLowerCase().includes(searchLower) || 
+                          p.description.toLowerCase().includes(searchLower);
+    return matchesCategory && matchesSearch;
+  });
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
@@ -45,10 +50,13 @@ export const Home: React.FC = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  // Reset to page 1 when category changes
+  // Reset to page 1 when category or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
   const handleCategoryChange = (category: ProductCategory | 'All') => {
     setSelectedCategory(category);
-    setCurrentPage(1);
   };
 
   const scrollToCatalog = () => {
@@ -73,6 +81,13 @@ export const Home: React.FC = () => {
     if (theme === ThemeType.SOFT) return 'hover:bg-[#292524]/10 text-[#292524] disabled:text-[#292524]/30';
     if (theme === ThemeType.MINIMAL) return 'hover:bg-gray-100 text-black disabled:text-gray-300';
     return 'hover:bg-white/10 text-white disabled:text-white/30';
+  };
+
+  const getSearchInputStyle = () => {
+    if (theme === ThemeType.SOFT) return 'bg-[#F5EBE0]/50 border-[#292524]/20 text-[#292524] placeholder-[#292524]/40 focus:border-[#292524]';
+    if (theme === ThemeType.MINIMAL) return 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-black';
+    if (theme === ThemeType.AMOLED) return 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-purple-500';
+    return 'bg-white/5 border-white/20 text-white placeholder-white/40 focus:border-white/50 focus:bg-white/10';
   };
 
   const categories: (ProductCategory | 'All')[] = ['All', 'Apparel', 'Electronics', 'Home'];
@@ -135,7 +150,7 @@ export const Home: React.FC = () => {
 
       {/* SECTION 2: CATALOG (Full Screen Snap Start) */}
       <section ref={catalogRef} className="min-h-screen w-full snap-start pt-24 px-4 md:px-8 pb-12 flex flex-col relative z-10 bg-inherit">
-        <div className="max-w-7xl mx-auto mb-12 w-full">
+        <div className="max-w-7xl mx-auto mb-10 w-full">
           <motion.h2 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -145,21 +160,45 @@ export const Home: React.FC = () => {
             Latest Drops
           </motion.h2>
           
-          {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4 mb-8">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryChange(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
-                  selectedCategory === cat 
-                    ? getButtonStyle() 
-                    : (theme === ThemeType.SOFT ? 'bg-transparent border border-[#292524]/20 hover:border-[#292524] text-[#292524]' : 'bg-transparent border border-white/20 hover:border-white text-white')
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Controls Container */}
+          <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center mb-8">
+            
+            {/* Search Bar */}
+            <div className="relative w-full lg:w-96 group">
+              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${theme === ThemeType.SOFT ? 'text-[#292524]/40 group-focus-within:text-[#292524]' : 'text-white/40 group-focus-within:text-white'}`} />
+              <input 
+                type="text" 
+                placeholder="Search products..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full pl-12 pr-10 py-3 rounded-full outline-none border transition-all ${getSearchInputStyle()}`}
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-black/10 transition-colors ${theme === ThemeType.SOFT ? 'text-[#292524]/60' : 'text-white/60'}`}
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex flex-wrap items-center gap-3">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
+                    selectedCategory === cat 
+                      ? getButtonStyle() 
+                      : (theme === ThemeType.SOFT ? 'bg-transparent border border-[#292524]/20 hover:border-[#292524] text-[#292524]' : 'bg-transparent border border-white/20 hover:border-white text-white')
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -265,8 +304,18 @@ export const Home: React.FC = () => {
               )}
               
               {displayedProducts.length === 0 && (
-                <div className="text-center py-20 opacity-50">
-                   No products found in this category.
+                <div className="text-center py-20 opacity-50 flex flex-col items-center">
+                   <Search size={48} className="mb-4 opacity-50" />
+                   <p className="text-xl font-bold">No products found</p>
+                   <p className="text-sm opacity-60 mt-2">Try adjusting your search or filters</p>
+                   {(searchQuery || selectedCategory !== 'All') && (
+                     <button 
+                        onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
+                        className="mt-6 text-sm underline opacity-80 hover:opacity-100"
+                     >
+                       Clear all filters
+                     </button>
+                   )}
                 </div>
               )}
             </>
