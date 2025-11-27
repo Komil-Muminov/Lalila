@@ -1,11 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./shared/context/ThemeContext";
-import { CartProvider } from "./shared/context/CartContext";
-import AppLayout from "./layouts/AppLayout";
-import { Home } from "./pages/Home";
-import { ProductDetails } from "./pages/ProductDetails";
-import { Admin } from "./pages/Admin";
+import { ThemeProvider, CartProvider } from "@/shared/ui/context";
+import { AppLayout } from "@/widgets";
+import { Home, ProductDetails, Admin } from "@/pages";
 
 const App: React.FC = () => {
 	return (
