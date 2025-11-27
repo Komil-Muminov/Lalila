@@ -14,7 +14,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
 		if (theme === ThemeType.SOFT) return "bg-[#E3D5CA] text-[#292524]";
 		if (theme === ThemeType.MINIMAL) return "bg-white text-black";
 		if (theme === ThemeType.AMOLED) return "bg-black text-white";
-		return "bg-gradient-to-br from-indigo-950 via-purple-900 to-black text-white";
+		return "bg-gradient-to-br from-blue-950 via-purple-900 to-black text-white";
 	};
 
 	return (
