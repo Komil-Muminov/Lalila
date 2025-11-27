@@ -4,7 +4,6 @@ import { CartProvider, ThemeProvider } from "./shared";
 import { Admin, Cart, Home, ProductDetails } from "./pages";
 import { Auth } from "./features/auth/ui";
 import AppLayout from "./widgets/layout/AppLayout";
-// import { Auth } from "@/fe/auth/ui";
 
 const App: React.FC = () => {
 	return (
