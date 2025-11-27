@@ -117,18 +117,20 @@ export const Navbar: React.FC = () => {
 				</div>
 
 				<button className="relative p-2 rounded-full hover:bg-black/5 transition-colors">
-					<FiShoppingBag className="w-6 h-6" />
-					{cart.length > 0 && (
-						<span
-							className={`absolute top-0 right-0 w-5 h-5 text-xs font-bold rounded-full flex items-center justify-center animate-bounce ${
-								theme === ThemeType.SOFT
-									? "bg-[#292524] text-[#E3D5CA]"
-									: "bg-pink-500 text-white"
-							}`}
-						>
-							{cart.reduce((acc, item) => acc + item.quantity, 0)}
-						</span>
-					)}
+					<Link to="/cart">
+						<FiShoppingBag className="w-6 h-6" />
+						{cart.length > 0 && (
+							<span
+								className={`absolute top-0 right-0 w-5 h-5 text-xs font-bold rounded-full flex items-center justify-center animate-bounce ${
+									theme === ThemeType.SOFT
+										? "bg-[#292524] text-[#E3D5CA]"
+										: "bg-pink-500 text-white"
+								}`}
+							>
+								{cart.reduce((acc, item) => acc + item.quantity, 0)}
+							</span>
+						)}
+					</Link>
 				</button>
 			</div>
 		</nav>

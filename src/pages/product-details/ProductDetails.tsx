@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ProductStage } from "@/shared/ui/components/3D/ProductStage";
-import { fetchProductById } from "@/shared/api";
-import { Product } from "@/entities/product";
+import { useProduct } from "@/shared/api";
 import { ThemeType } from "@/entities/theme";
 import { useCart } from "@/shared/ui/context";
 import { useTheme } from "@/shared/ui/context";
@@ -15,23 +14,14 @@ export const ProductDetails: React.FC = () => {
 	const { addToCart } = useCart();
 	const { theme } = useTheme();
 
-	const [product, setProduct] = useState<Product | undefined>(undefined);
-	const [loading, setLoading] = useState(true);
+	const { data: product, isLoading: loading } = useProduct(id || "");
 	const [selectedSize, setSelectedSize] = useState<string>("");
 
 	useEffect(() => {
-		const load = async () => {
-			if (!id) return;
-			setLoading(true);
-			const data = await fetchProductById(id);
-			setProduct(data);
-			if (data && data.sizes && data.sizes.length > 0) {
-				setSelectedSize(data.sizes[0]);
-			}
-			setLoading(false);
-		};
-		load();
-	}, [id]);
+		if (product && product.sizes && product.sizes.length > 0 && !selectedSize) {
+			setSelectedSize(product.sizes[0]);
+		}
+	}, [product, selectedSize]);
 
 	const getButtonStyle = () => {
 		if (theme === ThemeType.SOFT)

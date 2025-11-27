@@ -9,5 +9,7 @@ export interface CartContextType {
 	cart: CartItem[];
 	addToCart: (product: Product, size?: string) => void;
 	removeFromCart: (productId: string) => void;
+	increaseQuantity: (productId: string, size?: string) => void;
+	decreaseQuantity: (productId: string, size?: string) => void;
 	total: number;
 }

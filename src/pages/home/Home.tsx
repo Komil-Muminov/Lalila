@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ProductStage } from "@/shared/ui/components/3D/ProductStage";
-import { fetchProducts } from "@/shared/api";
+import { useProducts } from "@/shared/api";
 import { Product, ProductCategory } from "@/entities/product";
 import { ThemeType } from "@/entities/theme";
 import { useCart } from "@/shared/ui/context";
@@ -20,8 +20,7 @@ import {
 export const Home: React.FC = () => {
 	const { addToCart } = useCart();
 	const { theme } = useTheme();
-	const [products, setProducts] = useState<Product[]>([]);
-	const [loading, setLoading] = useState(true);
+	const { data: productsData = [], isLoading } = useProducts();
 	const [selectedCategory, setSelectedCategory] = useState<
 		ProductCategory | "Все"
 	>("Все");
@@ -31,15 +30,7 @@ export const Home: React.FC = () => {
 	const ITEMS_PER_PAGE = 8;
 	const catalogRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		const loadData = async () => {
-			setLoading(true);
-			const data = await fetchProducts();
-			setProducts(data);
-			setLoading(false);
-		};
-		loadData();
-	}, []);
+	const products = (productsData as Product[]) || [];
 
 	const filteredProducts = products.filter((p) => {
 		const matchesCategory =
@@ -57,7 +48,7 @@ export const Home: React.FC = () => {
 		currentPage * ITEMS_PER_PAGE,
 	);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		setCurrentPage(1);
 	}, [selectedCategory, searchQuery]);
 
@@ -242,7 +233,7 @@ export const Home: React.FC = () => {
 				</div>
 
 				<div className="max-w-7xl mx-auto w-full flex-grow">
-					{loading ? (
+					{isLoading ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
 							{Array.from({ length: 8 }).map((_, i) => (
 								<ProductSkeleton key={i} />

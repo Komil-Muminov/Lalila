@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
-	fetchProducts,
-	createProduct,
+	useProducts,
+	useCreateProduct,
 	updateProduct,
 	deleteProduct,
 } from "@/shared/api";
@@ -21,7 +21,9 @@ import {
 
 export const Admin: React.FC = () => {
 	const { theme } = useTheme();
-	const [products, setProducts] = useState<Product[]>([]);
+	const { data: productsData = [] } = useProducts();
+	const createMutation = useCreateProduct();
+
 	const [isEditing, setIsEditing] = useState<Product | null>(null);
 	const [isCreating, setIsCreating] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -37,14 +39,8 @@ export const Admin: React.FC = () => {
 		inStock: true,
 	});
 
-	const loadProducts = async () => {
-		const data = await fetchProducts();
-		setProducts(data);
-	};
-
-	useEffect(() => {
-		loadProducts();
-	}, []);
+	// Type conversion for compatibility
+	const products = productsData as Product[];
 
 	const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
 	const displayedProducts = products.slice(
@@ -52,22 +48,28 @@ export const Admin: React.FC = () => {
 		currentPage * ITEMS_PER_PAGE,
 	);
 
-	useEffect(() => {
-		if (currentPage > totalPages && totalPages > 0) setCurrentPage(totalPages);
-	}, [products.length, totalPages, currentPage]);
-
 	const handleSave = async () => {
-		if (isEditing && isEditing.id) await updateProduct(isEditing.id, formData);
-		else await createProduct(formData as Omit<Product, "id">);
+		if (isEditing && isEditing.id) {
+			await updateProduct(isEditing.id, formData as Partial<Product>);
+		} else {
+			createMutation.mutate(formData as Omit<Product, "id">);
+		}
 		setIsEditing(null);
 		setIsCreating(false);
-		loadProducts();
+		setFormData({
+			name: "",
+			price: 0,
+			description: "",
+			category: "Одежда",
+			shape: "box",
+			color: "#ffffff",
+			inStock: true,
+		});
 	};
 
 	const handleDelete = async (id: string) => {
 		if (window.confirm("Вы уверены?")) {
 			await deleteProduct(id);
-			loadProducts();
 		}
 	};
 
@@ -76,6 +78,7 @@ export const Admin: React.FC = () => {
 		setFormData(product);
 		setIsCreating(false);
 	};
+
 	const openCreate = () => {
 		setIsEditing(null);
 		setIsCreating(true);
@@ -98,7 +101,6 @@ export const Admin: React.FC = () => {
 			return "bg-white border border-gray-200 shadow-lg text-gray-900";
 		return "bg-black/30 backdrop-blur-xl border border-white/10 text-white shadow-2xl";
 	};
-
 	return (
 		<div className="min-h-screen pt-24 px-4 md:px-12 pb-12 w-full">
 			<div className="max-w-7xl mx-auto w-full">

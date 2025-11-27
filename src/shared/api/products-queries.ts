@@ -1,81 +1,25 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import apiClient from "./client";
-import type { IProduct } from "@/entities/product";
+import type { Product } from "@/entities/product";
+import { useGetQuery, usePostMutation } from "./hooks";
 
-// Fetch all products
+/**
+ * Fetch all products
+ */
 export const useProducts = () => {
-	return useQuery({
-		queryKey: ["products"],
-		queryFn: async () => {
-			const response = await apiClient.get<{ data: IProduct[] }>("/products");
-			return response.data.data;
-		},
-	});
+	return useGetQuery<Product[]>("/products", undefined, ["products"]);
 };
 
-// Fetch product by ID
-export const useProduct = (id: string | undefined) => {
-	return useQuery({
-		queryKey: ["product", id],
-		queryFn: async () => {
-			const response = await apiClient.get<{ data: IProduct }>(
-				`/products/${id}`,
-			);
-			return response.data.data;
-		},
-		enabled: !!id,
-	});
+/**
+ * Fetch product by ID
+ */
+export const useProduct = (id: string | null | undefined) => {
+	return useGetQuery<Product>("/products", id || undefined, ["product", id]);
 };
 
-// Create product
+/**
+ * Create new product
+ */
 export const useCreateProduct = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async (newProduct: Omit<IProduct, "_id">) => {
-			const response = await apiClient.post<{ data: IProduct }>(
-				"/products",
-				newProduct,
-			);
-			return response.data.data;
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
-		},
-	});
-};
-
-// Update product
-export const useUpdateProduct = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({
-			id,
-			product,
-		}: {
-			id: string;
-			product: Partial<IProduct>;
-		}) => {
-			const response = await apiClient.put<{ data: IProduct }>(
-				`/products/${id}`,
-				product,
-			);
-			return response.data.data;
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
-		},
-	});
-};
-
-// Delete product
-export const useDeleteProduct = () => {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async (id: string) => {
-			await apiClient.delete(`/products/${id}`);
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
-		},
-	});
+	return usePostMutation<Product, Omit<Product, "id">>("/products", [
+		"products",
+	]);
 };

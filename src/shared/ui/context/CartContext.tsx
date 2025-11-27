@@ -34,12 +34,41 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 		setCart((prev) => prev.filter((item) => item.id !== productId));
 	};
 
+	const increaseQuantity = (productId: string, size?: string) => {
+		setCart((prev) =>
+			prev.map((item) =>
+				item.id === productId && item.selectedSize === size
+					? { ...item, quantity: item.quantity + 1 }
+					: item,
+			),
+		);
+	};
+
+	const decreaseQuantity = (productId: string, size?: string) => {
+		setCart((prev) =>
+			prev.map((item) =>
+				item.id === productId && item.selectedSize === size
+					? { ...item, quantity: Math.max(1, item.quantity - 1) }
+					: item,
+			),
+		);
+	};
+
 	const total = useMemo(() => {
 		return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 	}, [cart]);
 
 	return (
-		<CartContext.Provider value={{ cart, addToCart, removeFromCart, total }}>
+		<CartContext.Provider
+			value={{
+				cart,
+				addToCart,
+				removeFromCart,
+				increaseQuantity,
+				decreaseQuantity,
+				total,
+			}}
+		>
 			{children}
 		</CartContext.Provider>
 	);
