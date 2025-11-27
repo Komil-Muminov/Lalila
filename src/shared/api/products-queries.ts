@@ -1,4 +1,4 @@
-import type { Product } from "@/entities/product";
+import type { Product } from "@/en/product";
 import { useGetQuery, usePostMutation } from "./hooks";
 
 /**

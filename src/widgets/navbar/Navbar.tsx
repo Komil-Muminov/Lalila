@@ -1,8 +1,5 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useTheme } from "@/shared/ui/context";
-import { useCart } from "@/shared/ui/context";
-import { ThemeType } from "@/entities/theme";
 import {
 	FiShoppingBag,
 	FiBox,
@@ -12,6 +9,8 @@ import {
 	FiCoffee,
 	FiSettings,
 } from "react-icons/fi";
+import { useCart, useTheme } from "@/shared";
+import { ThemeType } from "@/entities";
 
 export const Navbar: React.FC = () => {
 	const { theme, setTheme } = useTheme();

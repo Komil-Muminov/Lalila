@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-	useProducts,
-	useCreateProduct,
-	updateProduct,
-	deleteProduct,
-} from "@/shared/api";
-import { Product } from "@/entities/product";
-import { ThemeType } from "@/entities/theme";
-import { useTheme } from "@/shared/ui/context";
+
+import { Product } from "@/en/product";
 import {
 	Trash2,
 	Edit2,
@@ -18,6 +11,14 @@ import {
 	ChevronLeft,
 	ChevronRight,
 } from "lucide-react";
+import {
+	deleteProduct,
+	updateProduct,
+	useCreateProduct,
+	useProducts,
+	useTheme,
+} from "@/shared";
+import { ThemeType } from "@/entities";
 
 export const Admin: React.FC = () => {
 	const { theme } = useTheme();

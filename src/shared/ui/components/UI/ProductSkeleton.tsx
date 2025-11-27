@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme } from "@/shared/ui/context";
-import { ThemeType } from "@/entities/theme";
+import { useTheme } from "../../context";
+import { ThemeType } from "@/entities";
 
 export const ProductSkeleton: React.FC = () => {
 	const { theme } = useTheme();

@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useCart } from "@/shared/ui/context";
-import { useTheme } from "@/shared/ui/context";
-import { ThemeType } from "@/entities/theme";
 import {
 	ArrowLeft,
 	Trash2,
@@ -12,6 +9,8 @@ import {
 	Plus,
 	Minus,
 } from "lucide-react";
+import { useCart, useTheme } from "@/shared";
+import { ThemeType } from "@/entities";
 
 export const Cart: React.FC = () => {
 	const navigate = useNavigate();

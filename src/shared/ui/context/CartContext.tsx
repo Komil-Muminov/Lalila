@@ -5,7 +5,7 @@ import React, {
 	ReactNode,
 	useMemo,
 } from "react";
-import { CartItem, CartContextType, Product } from "@/entities/cart";
+import { CartItem, CartContextType, Product } from "@/en/cart";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 

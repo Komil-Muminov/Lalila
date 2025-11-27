@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CartProvider } from "@/shared/ui/context";
-import { AppLayout } from "@/widgets";
-import { Home, ProductDetails, Admin, Cart } from "@/pages";
+import { CartProvider, ThemeProvider } from "./shared";
+import { Admin, Cart, Home, ProductDetails } from "./pages";
 import { Auth } from "./features/auth/ui";
+import AppLayout from "./widgets/layout/AppLayout";
+// import { Auth } from "@/fe/auth/ui";
 
 const App: React.FC = () => {
 	return (
@@ -24,5 +25,4 @@ const App: React.FC = () => {
 		</ThemeProvider>
 	);
 };
-
 export default App;

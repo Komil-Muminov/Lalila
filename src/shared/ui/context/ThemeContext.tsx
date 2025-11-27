@@ -1,5 +1,5 @@
+import { ThemeContextType, ThemeType } from "@/entities";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { ThemeType, ThemeContextType } from "@/entities/theme";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 

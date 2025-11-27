@@ -1,13 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ProductStage } from "@/shared/ui/components/3D/ProductStage";
-import { useProducts } from "@/shared/api";
-import { Product, ProductCategory } from "@/entities/product";
-import { ThemeType } from "@/entities/theme";
-import { useCart } from "@/shared/ui/context";
-import { useTheme } from "@/shared/ui/context";
-import { ProductSkeleton } from "@/shared/ui/components/UI/ProductSkeleton";
+import { Product, ProductCategory } from "@/en/product";
+
 import {
 	Plus,
 	Search,
@@ -16,6 +11,14 @@ import {
 	ArrowDown,
 	X,
 } from "lucide-react";
+import {
+	ProductSkeleton,
+	ProductStage,
+	useCart,
+	useProducts,
+	useTheme,
+} from "@/shared";
+import { ThemeType } from "@/entities";
 
 export const Home: React.FC = () => {
 	const { addToCart } = useCart();

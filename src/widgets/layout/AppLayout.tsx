@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import { useTheme } from "@/shared/ui/context";
-import { ThemeType } from "@/entities/theme";
 import { Navbar } from "../navbar";
+import { useTheme } from "@/shared";
+import { ThemeType } from "@/entities";
 
 interface AppLayoutProps {
 	children: ReactNode;

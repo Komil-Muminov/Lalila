@@ -1,7 +1,7 @@
-import { If } from "@/shared/ui/if/ui";
 import { useState } from "react";
 import { Login } from "../login";
 import { Registration } from "../registration";
+import { If } from "@/shared/ui/if";
 
 export const Auth: React.FC = () => {
 	const [isLogin, setIsLogin] = useState(true);

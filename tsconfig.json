@@ -25,7 +25,12 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["src/*"],
+			"@/en/*": ["src/entities/*"],
+			"@/fe/*": ["src/features/*"],
+			"@/pg/*": ["src/pages/*"],
+			"@/sh/*": ["src/shared/*"],
+			"@/wd/*": ["src/widgets/*"]
 		}
 	},
 	"include": ["src"]

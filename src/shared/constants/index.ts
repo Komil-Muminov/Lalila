@@ -1,4 +1,4 @@
-import { Product } from "@/entities/product";
+import { Product } from "@/en/product";
 
 export const CATEGORIES = [
 	"Одежда",

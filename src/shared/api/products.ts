@@ -1,5 +1,5 @@
 import { MOCK_PRODUCTS } from "../constants";
-import { Product } from "@/entities/product";
+import { Product } from "@/en/product";
 
 // Simulating database state in memory for the session
 let dbProducts = [...MOCK_PRODUCTS];
