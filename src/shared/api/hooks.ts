@@ -11,6 +11,7 @@ import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { tokenControl } from "../config/tokenControl";
 import { _axios } from "../config";
+import apiClient from "./client";
 
 // =================================================================
 // 1. УНИВЕРСАЛЬНЫЙ GET ХУК (useGetQuery)
@@ -153,3 +154,26 @@ export const useMutationQuery = <TRequest = any, TResponse = any>(
 		},
 	});
 };
+
+export function usePostMutation<TData, TVariables = unknown>(
+	endpoint: string,
+	invalidateKeys?: string[],
+	options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationFn">,
+) {
+	const queryClient = useQueryClient();
+
+	return useMutation<TData, Error, TVariables>({
+		mutationFn: async (data: TVariables) => {
+			const response = await apiClient.post<{ data: TData }>(endpoint, data);
+			return response.data.data;
+		},
+		onSuccess: () => {
+			if (invalidateKeys && invalidateKeys.length > 0) {
+				invalidateKeys.forEach((key) => {
+					queryClient.invalidateQueries({ queryKey: [key] });
+				});
+			}
+		},
+		...options,
+	});
+}

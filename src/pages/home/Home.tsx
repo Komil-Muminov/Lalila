@@ -11,14 +11,9 @@ import {
 	ArrowDown,
 	X,
 } from "lucide-react";
-import {
-	ProductSkeleton,
-	ProductStage,
-	useCart,
-	useProducts,
-	useTheme,
-} from "@/shared";
+import { ProductSkeleton, ProductStage, useCart, useTheme } from "@/shared";
 import { ThemeType } from "@/entities";
+import { useProducts } from "@/shared/api/products-queries";
 
 export const Home: React.FC = () => {
 	const { addToCart } = useCart();

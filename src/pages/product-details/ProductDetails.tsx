@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Check, ShoppingBag } from "lucide-react";
-import { ProductStage, useCart, useProduct, useTheme } from "@/shared";
+import { ProductStage, useCart, useTheme } from "@/shared";
 import { ThemeType } from "@/entities";
+import { useProduct } from "@/shared/api/products-queries";
 
 export const ProductDetails: React.FC = () => {
 	const { id } = useParams<{ id: string }>();

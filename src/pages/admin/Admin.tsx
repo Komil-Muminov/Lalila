@@ -11,14 +11,10 @@ import {
 	ChevronLeft,
 	ChevronRight,
 } from "lucide-react";
-import {
-	deleteProduct,
-	updateProduct,
-	useCreateProduct,
-	useProducts,
-	useTheme,
-} from "@/shared";
+import { useTheme } from "@/shared";
 import { ThemeType } from "@/entities";
+import { deleteProduct, updateProduct } from "@/shared/api/products";
+import { useCreateProduct, useProducts } from "@/shared/api/products-queries";
 
 export const Admin: React.FC = () => {
 	const { theme } = useTheme();
