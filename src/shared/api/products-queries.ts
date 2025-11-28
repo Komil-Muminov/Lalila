@@ -40,7 +40,7 @@ export const useProduct = (id: string | null | undefined) => {
  */
 export const useCreateProduct = () => {
 	return useMutationQuery<Omit<Product, "id">, Product>({
-		url: "/products",
+		url: "/create/products",
 		method: "POST",
 		messages: {
 			success: "Продукт успешно добавлен!",
