@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Check, ShoppingBag } from "lucide-react";
 import { ProductStage, useCart, useTheme } from "@/shared";
 import { ThemeType } from "@/entities";
+// Импорт обновленного хука useProduct
 import { useProduct } from "@/shared/api/products-queries";
 
 export const ProductDetails: React.FC = () => {
@@ -12,6 +13,7 @@ export const ProductDetails: React.FC = () => {
 	const { addToCart } = useCart();
 	const { theme } = useTheme();
 
+	// 💡 Используем обновленный хук useProduct
 	const { data: product, isLoading: loading } = useProduct(id || "");
 	const [selectedSize, setSelectedSize] = useState<string>("");
 
