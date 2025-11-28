@@ -1,4 +1,4 @@
-import { Auth } from "@/fe/auth/ui";
+import { Auth } from "@/features/auth/ui";
 
 export const AuthPage: React.FC = () => {
 	return (
