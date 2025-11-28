@@ -1,17 +1,26 @@
-const ACCESS_TOKEN_KEY = "lalila/REFRESH_TOKEN_KEY";
-const REFRESH_TOKEN_KEY = "lalila/REFRESH_TOKEN_KEY";
+const ACCESS_TOKEN = "lalila/accessToken";
+const REFETCH_TOKEN = "lalila/refetchToken";
+const ROLE = "lalila/role";
 interface IToken {
 	accessToken: string;
 	refetchToken: string;
-	// expireTime: number;
 }
 
+interface IRole {
+	roleId: string;
+}
 export const tokenControl = {
 	set: ({ accessToken, refetchToken }: IToken) => {
-		localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-		localStorage.setItem(REFRESH_TOKEN_KEY, refetchToken);
+		localStorage.setItem(ACCESS_TOKEN, accessToken);
+		localStorage.setItem(REFETCH_TOKEN, refetchToken);
 	},
 	get: () => {
-		return localStorage.getItem(ACCESS_TOKEN_KEY);
+		return localStorage.getItem(ACCESS_TOKEN);
+	},
+	setRole: ({ roleId }: IRole) => {
+		localStorage.setItem(ROLE, roleId);
+	},
+	getRole: () => {
+		return localStorage.getItem(ROLE);
 	},
 };
