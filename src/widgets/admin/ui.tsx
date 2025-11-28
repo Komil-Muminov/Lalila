@@ -35,7 +35,6 @@ export const RootAdmin: React.FC = () => {
 	const handleClose = () => {
 		setIsEditing(null);
 		setIsCreating(false);
-		// Перезагрузка списка после закрытия модалки
 		fetchProductsMutation.mutate();
 	};
 
