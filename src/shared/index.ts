@@ -4,3 +4,4 @@ export { ProductSkeleton } from "./ui/components/UI/ProductSkeleton";
 export { ProductStage } from "./ui/components/3D/ProductStage";
 export * from "./api";
 export * from "./constants";
+export * from "./config";

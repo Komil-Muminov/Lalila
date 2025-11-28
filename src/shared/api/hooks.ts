@@ -1,64 +1,155 @@
 import {
 	useQuery,
-	useMutation,
-	useQueryClient,
 	UseQueryOptions,
+	UseQueryResult,
+	useMutation,
 	UseMutationOptions,
+	useQueryClient,
+	MutationFunction,
 } from "@tanstack/react-query";
-import apiClient from "./client";
+import { useCallback } from "react";
+import { toast } from "react-toastify";
+import { tokenControl } from "../config/tokenControl";
+import { _axios } from "../config";
 
-/**
- * Generic GET query hook for fetching data
- * @param endpoint - API endpoint path
- * @param id - Optional ID to append to endpoint
- * @param queryKey - React Query key
- * @param options - Additional useQuery options
- */
-export function useGetQuery<T>(
-	endpoint: string,
-	id?: string | null | undefined,
-	queryKey?: (string | null | undefined)[],
-	options?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn">,
-) {
-	const finalEndpoint = id ? `${endpoint}/${id}` : endpoint;
-	const finalKey = queryKey || [endpoint, id];
+// =================================================================
+// 1. УНИВЕРСАЛЬНЫЙ GET ХУК (useGetQuery)
+// =================================================================
 
-	return useQuery<T>({
-		queryKey: finalKey,
-		queryFn: async () => {
-			const response = await apiClient.get<{ data: T }>(finalEndpoint);
-			return response.data.data;
-		},
-		enabled: id ? !!id : true,
-		...options,
-	});
+interface IUseGetQueryOptions<TRequest = any, TResponse = any, TSelect = any> {
+	url: string;
+	method?: "GET" | "POST";
+	params?: TRequest;
+	useToken?: boolean; // Опция для добавления токена
+	options?: Partial<UseQueryOptions<TResponse, unknown, TSelect>>;
 }
 
 /**
- * Generic POST mutation hook
- * @param endpoint - API endpoint path
- * @param invalidateKeys - Query keys to invalidate on success
- * @param options - Additional useMutation options
+ * Хук для запросов данных (GET/POST) с поддержкой токена и параметров
  */
-export function usePostMutation<TData, TVariables = unknown>(
-	endpoint: string,
-	invalidateKeys?: string[],
-	options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationFn">,
-) {
+export const useGetQuery = <
+	TRequest = any,
+	TResponse = any,
+	TSelect = TResponse,
+>(
+	options: IUseGetQueryOptions<TRequest, TResponse, TSelect>,
+) => {
+	const {
+		url,
+		params,
+		method = "POST",
+		useToken = false,
+		options: queryOptions,
+	} = options;
+
+	const queryFn = useCallback(async () => {
+		const headers: Record<string, string> = {};
+
+		if (useToken) {
+			const token = tokenControl.get();
+			if (token) {
+				headers.Authorization = `Bearer ${token}`;
+			}
+		}
+
+		const response = await _axios<TResponse>(url, {
+			method,
+			headers,
+			[method === "POST" ? "data" : "params"]: params ?? {},
+		});
+
+		return response.data;
+	}, [url, params, useToken, method]);
+
+	return useQuery({
+		queryFn,
+		queryKey: [url, params, useToken, method],
+		...queryOptions,
+	}) as UseQueryResult<TSelect, unknown>;
+};
+
+// =================================================================
+// 2. УНИВЕРСАЛЬНЫЙ MUTATION ХУК (useMutationQuery) - ИСПРАВЛЕНО
+// =================================================================
+
+interface IUseMutationQueryOptions<TRequest = any, TResponse = any> {
+	url: string;
+	method: "POST" | "PUT" | "DELETE";
+	messages?: {
+		success?: string;
+		error?: string;
+		invalidate?: string[];
+		cb?: (data: TResponse) => void;
+	};
+	queryParams?: Record<string, any>;
+	queryOptions?: UseMutationOptions<TResponse, unknown, TRequest, unknown>;
+}
+
+/**
+ * Хук для мутаций (POST/PUT/DELETE) с поддержкой уведомлений и инвалидации
+ */
+export const useMutationQuery = <TRequest = any, TResponse = any>(
+	options: IUseMutationQueryOptions<TRequest, TResponse>,
+) => {
+	const { url, method, messages, queryParams, queryOptions } = options;
+
 	const queryClient = useQueryClient();
 
-	return useMutation<TData, Error, TVariables>({
-		mutationFn: async (data: TVariables) => {
-			const response = await apiClient.post<{ data: TData }>(endpoint, data);
-			return response.data.data;
+	const mutationFn: MutationFunction<TResponse, TRequest> = useCallback(
+		async (data: TRequest) => {
+			const response = await _axios<TResponse>({
+				url,
+				method,
+				data,
+				params: queryParams || undefined,
+				suppressErrorToast: Boolean(messages?.error),
+			} as any);
+
+			return response.data;
 		},
-		onSuccess: () => {
-			if (invalidateKeys && invalidateKeys.length > 0) {
-				invalidateKeys.forEach((key) => {
-					queryClient.invalidateQueries({ queryKey: [key] });
-				});
+		[url, method, queryParams],
+	);
+
+	return useMutation({
+		mutationFn,
+		...queryOptions,
+		onSuccess: (data, variables, context, mutation) => {
+			// 1. Показ тоста об успехе
+			if (messages?.success) {
+				toast.success(messages.success);
+			}
+
+			// 2. Вызов пользовательского callback
+			messages?.cb?.(data);
+
+			// 3. Вызов onSuccess из переданных опций
+			queryOptions?.onSuccess?.(data, variables, context, mutation);
+
+			// 4. Инвалидация и повторный запрос (refetch) ключей
+			if (messages?.invalidate) {
+				queryClient.invalidateQueries({ queryKey: messages.invalidate });
+				queryClient.refetchQueries({ queryKey: messages.invalidate });
 			}
 		},
-		...options,
+		onError: (error: any, variables, context, mutation) => {
+			let errorMessage = "Произошла ошибка";
+
+			// 1. Извлечение сообщения об ошибке из ответа API
+			if (error?.response?.data?.Message) {
+				errorMessage = error.response.data.Message;
+			} else if (error?.response?.data?.message) {
+				errorMessage = error.response.data.message;
+			} else if (error?.message) {
+				errorMessage = error.message;
+			}
+
+			// 2. Показ тоста об ошибке (только если не передан пользовательский error message)
+			if (!messages?.error) {
+				toast.error(errorMessage);
+			}
+
+			// 3. Вызов onError из переданных опций
+			queryOptions?.onError?.(error, variables, context, mutation);
+		},
 	});
-}
+};

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import "./index.css";
-import { queryClient } from "./queryClient";
+import { queryClient } from "./shared/config/queryClient";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

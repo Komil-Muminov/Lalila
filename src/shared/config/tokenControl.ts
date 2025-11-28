@@ -17,6 +17,10 @@ export const tokenControl = {
 	get: () => {
 		return localStorage.getItem(ACCESS_TOKEN);
 	},
+	remove: () => {
+		localStorage.removeItem(ACCESS_TOKEN);
+		localStorage.removeItem(REFETCH_TOKEN);
+	},
 	setRole: ({ roleId }: IRole) => {
 		localStorage.setItem(ROLE, roleId);
 	},
