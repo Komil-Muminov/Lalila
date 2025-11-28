@@ -4,6 +4,7 @@ import { CartProvider, ThemeProvider } from "./shared";
 import { Admin, Cart, Home, ProductDetails } from "./pages";
 import AppLayout from "./widgets/layout/AppLayout";
 import { AuthPage } from "./pages/auth/AuthPage";
+import { HomePage } from "./pages/home/Home";
 
 const App: React.FC = () => {
 	return (
@@ -12,7 +13,7 @@ const App: React.FC = () => {
 				<Router>
 					<AppLayout>
 						<Routes>
-							<Route path="/" element={<Home />} />
+							<Route path="/" element={<HomePage />} />
 							<Route path="/auth" element={<AuthPage />} />
 							<Route path="/product/:id" element={<ProductDetails />} />
 							<Route path="/cart" element={<Cart />} />
